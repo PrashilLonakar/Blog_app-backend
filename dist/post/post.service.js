@@ -6,19 +6,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AppModule = void 0;
+exports.PostService = void 0;
 const common_1 = require("@nestjs/common");
-const app_controller_1 = require("./app.controller");
-const app_service_1 = require("./app.service");
-const post_module_1 = require("./post/post.module");
-let AppModule = class AppModule {
+let PostService = class PostService {
+    create(createPostDto) {
+        return 'This action adds a new post';
+    }
+    findAll() {
+        return `This action returns all post`;
+    }
+    findOne(id) {
+        return `This action returns a #${id} post`;
+    }
+    update(id, updatePostDto) {
+        return `This action updates a #${id} post`;
+    }
+    remove(id) {
+        return `This action removes a #${id} post`;
+    }
 };
-exports.AppModule = AppModule;
-exports.AppModule = AppModule = __decorate([
-    (0, common_1.Module)({
-        imports: [post_module_1.PostModule],
-        controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService],
-    })
-], AppModule);
-//# sourceMappingURL=app.module.js.map
+exports.PostService = PostService;
+exports.PostService = PostService = __decorate([
+    (0, common_1.Injectable)()
+], PostService);
+//# sourceMappingURL=post.service.js.map
