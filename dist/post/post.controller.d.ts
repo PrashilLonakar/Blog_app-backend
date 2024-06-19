@@ -4,9 +4,9 @@ import { UpdatePostDto } from './dto/update-post.dto';
 export declare class PostController {
     private readonly postService;
     constructor(postService: PostService);
-    create(createPostDto: CreatePostDto): string;
-    findAll(): string;
-    findOne(id: string): string;
-    update(id: string, updatePostDto: UpdatePostDto): string;
-    remove(id: string): string;
+    create(createPostDto: CreatePostDto): Promise<import("typeorm").InsertResult>;
+    findAll(): Promise<import("./entities/post.entity").Post[]>;
+    findOne(id: string): Promise<import("./entities/post.entity").Post>;
+    update(id: string, updatePostDto: UpdatePostDto): Promise<import("typeorm").UpdateResult>;
+    remove(id: string): Promise<import("typeorm").DeleteResult>;
 }
