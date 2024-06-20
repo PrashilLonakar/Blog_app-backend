@@ -1,13 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-@Entity('catergories')
-export class Category {
-  @PrimaryGeneratedColumn()
-  id: number;
-  @Column()
-  title: string;
-  @Column()
-  description: string;
-}
+import { Post } from 'src/post/entities/post.entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 @Entity('users')
 export class User {
@@ -23,4 +15,7 @@ export class User {
   password: string;
   @Column()
   profilePic: string;
+
+  @OneToMany(() => Post, (post) => post.user)
+  posts: Post[];
 }
