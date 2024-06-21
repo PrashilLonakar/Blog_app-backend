@@ -1,4 +1,4 @@
-import { User } from 'src/auth/entities/user.entity';
+import { User } from 'src/user/entities/user.entity';
 import { Category } from 'src/category/entities/category.entity';
 export declare class Post {
     id: number;
@@ -8,6 +8,8 @@ export declare class Post {
     createdOn: Date;
     modifiedOn: Date;
     mainImageUrl: string;
+    userId: number;
+    categoryId: number;
     user: User;
     category: Category;
 }
