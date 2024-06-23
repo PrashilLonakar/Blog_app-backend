@@ -6,7 +6,10 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  BeforeInsert,
 } from 'typeorm';
+import slugify from 'slugify';
+
 @Entity('posts')
 export class Post {
   @PrimaryGeneratedColumn()
@@ -53,4 +56,12 @@ export class Post {
     referencedColumnName: 'id',
   })
   category: Category;
+
+  @BeforeInsert()
+  slugifyPost() {
+    this.slug = slugify(this.title.substr(0, 20), {
+      lower: true,
+      replacement: '_',
+    });
+  }
 }

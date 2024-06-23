@@ -12,4 +12,5 @@ export declare class Post {
     categoryId: number;
     user: User;
     category: Category;
+    slugifyPost(): void;
 }
