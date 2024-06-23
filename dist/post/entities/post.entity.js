@@ -13,7 +13,14 @@ exports.Post = void 0;
 const user_entity_1 = require("../../user/entities/user.entity");
 const category_entity_1 = require("../../category/entities/category.entity");
 const typeorm_1 = require("typeorm");
+const slugify_1 = require("slugify");
 let Post = class Post {
+    slugifyPost() {
+        this.slug = (0, slugify_1.default)(this.title.substr(0, 20), {
+            lower: true,
+            replacement: '_',
+        });
+    }
 };
 exports.Post = Post;
 __decorate([
@@ -78,6 +85,12 @@ __decorate([
     }),
     __metadata("design:type", category_entity_1.Category)
 ], Post.prototype, "category", void 0);
+__decorate([
+    (0, typeorm_1.BeforeInsert)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], Post.prototype, "slugifyPost", null);
 exports.Post = Post = __decorate([
     (0, typeorm_1.Entity)('posts')
 ], Post);
