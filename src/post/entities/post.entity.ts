@@ -9,6 +9,7 @@ import {
   BeforeInsert,
 } from 'typeorm';
 import slugify from 'slugify';
+import { Exclude } from 'class-transformer';
 
 @Entity('posts')
 export class Post {
@@ -34,9 +35,11 @@ export class Post {
   mainImageUrl: string;
 
   @Column()
+  @Exclude()
   userId: number;
 
   @Column({ default: 3 })
+  @Exclude()
   categoryId: number;
 
   @ManyToOne(() => User, (user) => user.posts, {
