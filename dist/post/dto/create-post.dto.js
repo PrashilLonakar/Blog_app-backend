@@ -26,6 +26,11 @@ __decorate([
     __metadata("design:type", String)
 ], CreatePostDto.prototype, "content", void 0);
 __decorate([
+    (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Number)
+], CreatePostDto.prototype, "categoryId", void 0);
+__decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)({ message: 'mainImageUrl must be a string' }),
     __metadata("design:type", String)
