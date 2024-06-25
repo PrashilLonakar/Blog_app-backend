@@ -26,6 +26,7 @@ export class PostController {
   }
 
   @Get()
+  @UseInterceptors(ClassSerializerInterceptor)
   findAll() {
     return this.postService.findAll();
   }

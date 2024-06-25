@@ -48,6 +48,7 @@ __decorate([
 ], PostController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    (0, common_1.UseInterceptors)(common_1.ClassSerializerInterceptor),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
