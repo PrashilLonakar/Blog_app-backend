@@ -1,12 +1,17 @@
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { Request } from 'express';
 export declare class PostController {
     private readonly postService;
     constructor(postService: PostService);
-    create(createPostDto: CreatePostDto): Promise<import("./entities/post.entity").Post>;
-    findAll(): Promise<import("./entities/post.entity").Post[]>;
+    create(createPostDto: CreatePostDto, req: Request): Promise<import("./entities/post.entity").Post>;
+    findAll(query: any): Promise<import("./entities/post.entity").Post[]>;
     findOne(id: string): Promise<import("./entities/post.entity").Post>;
-    update(id: string, updatePostDto: UpdatePostDto): Promise<import("typeorm").UpdateResult>;
-    remove(id: string): Promise<import("typeorm").DeleteResult>;
+    findBySlug(slug: string): Promise<import("./entities/post.entity").Post>;
+    update(id: string, updatePostDto: UpdatePostDto): Promise<import("./entities/post.entity").Post>;
+    remove(id: string): Promise<{
+        success: boolean;
+        post: import("./entities/post.entity").Post;
+    }>;
 }

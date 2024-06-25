@@ -21,15 +21,37 @@ let PostService = class PostService {
     constructor(repo) {
         this.repo = repo;
     }
-    async create(createPostDto) {
+    async create(createPostDto, user) {
         const post = new post_entity_1.Post();
         post.userId = 1;
         Object.assign(post, createPostDto);
         this.repo.create(post);
         return await this.repo.save(post);
     }
-    async findAll() {
-        return await this.repo.find();
+    async findAll(query) {
+        const myQuery = this.repo
+            .createQueryBuilder('post')
+            .leftJoinAndSelect('post.category', 'category')
+            .leftJoinAndSelect('post.user', 'user');
+        if (!(Object.keys(query).length === 0) && query.constructor === Object) {
+            const queryKeys = Object.keys(query);
+            if (queryKeys.includes('title')) {
+                myQuery.where('post.title LIKE :title', {
+                    title: `%${query['title']}%`,
+                });
+            }
+            if (queryKeys.includes('sort')) {
+                myQuery.orderBy('post.title', query['sort'].toUpperCase());
+            }
+            if (queryKeys.includes('category')) {
+                myQuery.andWhere('category.title = :cat', { cat: query['category'] });
+                console.log('3', myQuery);
+            }
+            return await myQuery.getMany();
+        }
+        else {
+            return await myQuery.getMany();
+        }
     }
     async findOne(id) {
         const post = await this.repo.findOneBy({ id });
@@ -38,11 +60,32 @@ let PostService = class PostService {
         }
         return post;
     }
+    async findBySlug(slug) {
+        try {
+            const post = await this.repo.findOneByOrFail({ slug });
+            return post;
+        }
+        catch (err) {
+            throw new common_1.BadRequestException(`Post with slug ${slug} not found`);
+        }
+    }
     async update(id, updatePostDto) {
-        return await this.repo.update({ id }, updatePostDto);
+        const post = await this.repo.findOneBy({ id });
+        if (!post) {
+            throw new common_1.BadRequestException(`Post not found`);
+        }
+        post.modifiedOn = new Date(Date.now());
+        post.category = updatePostDto.category;
+        Object.assign(post, updatePostDto);
+        return await this.repo.save(post);
     }
     async remove(id) {
-        return await this.repo.delete({ id });
+        const post = await this.repo.findOneBy({ id });
+        if (!post) {
+            throw new common_1.BadRequestException(`Post not found`);
+        }
+        await this.repo.remove(post);
+        return { success: true, post };
     }
 };
 exports.PostService = PostService;
