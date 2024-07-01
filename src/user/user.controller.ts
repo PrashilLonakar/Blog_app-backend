@@ -6,37 +6,29 @@ import {
   Patch,
   Param,
   Delete,
+  Res,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { LoginUserDto } from './dto/login-user.dto';
+import { Response } from 'express';
 
 @Controller('auth')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
-  }
+  @Post('login')
+  async userLogin(@Body() loginUserDto: LoginUserDto, @Res() res: Response) {
+    console.log('loginUserDto', loginUserDto);
 
-  @Get()
-  findAll() {
-    return this.userService.findAll();
-  }
+    const { token, user } = await this.userService.login(loginUserDto);
+    res.cookie('isAuthenticated', true, { maxAge: 2 * 60 * 60 * 1000 }); //max age 2 hours
+    res.cookie('authentication', token, {
+      httpOnly: true,
+      maxAge: 2 * 60 * 60 * 1000,
+    });
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+    return res.send({ success: true, user });
   }
 }
