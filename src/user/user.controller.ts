@@ -20,8 +20,6 @@ export class UserController {
 
   @Post('login')
   async userLogin(@Body() loginUserDto: LoginUserDto, @Res() res: Response) {
-    console.log('loginUserDto', loginUserDto);
-
     const { token, user } = await this.userService.login(loginUserDto);
     res.cookie('isAuthenticated', true, { maxAge: 2 * 60 * 60 * 1000 }); //max age 2 hours
     res.cookie('Authentication', token, {
