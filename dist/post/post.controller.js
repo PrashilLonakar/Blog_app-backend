@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const post_service_1 = require("./post.service");
 const create_post_dto_1 = require("./dto/create-post.dto");
 const update_post_dto_1 = require("./dto/update-post.dto");
+const passport_1 = require("@nestjs/passport");
 let PostController = class PostController {
     constructor(postService) {
         this.postService = postService;
@@ -43,6 +44,7 @@ let PostController = class PostController {
 exports.PostController = PostController;
 __decorate([
     (0, common_1.Post)(),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     (0, common_1.UsePipes)(common_1.ValidationPipe),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Req)()),
@@ -52,7 +54,6 @@ __decorate([
 ], PostController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
-    (0, common_1.UseInterceptors)(common_1.ClassSerializerInterceptor),
     __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -74,6 +75,7 @@ __decorate([
 ], PostController.prototype, "findBySlug", null);
 __decorate([
     (0, common_1.Patch)(':id'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -82,6 +84,7 @@ __decorate([
 ], PostController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -89,6 +92,7 @@ __decorate([
 ], PostController.prototype, "remove", null);
 exports.PostController = PostController = __decorate([
     (0, common_1.Controller)('post'),
+    (0, common_1.UseInterceptors)(common_1.ClassSerializerInterceptor),
     __metadata("design:paramtypes", [post_service_1.PostService])
 ], PostController);
 //# sourceMappingURL=post.controller.js.map
