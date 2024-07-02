@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
@@ -26,7 +30,7 @@ export class UserService {
     console.log('user', user);
 
     if (!user) {
-      throw new UnauthorizedException('Bad credentials - user not found');
+      throw new UnauthorizedException('Bad credentials');
     } else {
       //verify that supplied password hash is matching with stored password hash in database
       if (await this.verifyPassword(loginDto.password, user.password)) {
@@ -37,12 +41,29 @@ export class UserService {
         delete user.password;
         return { token, user };
       } else {
-        throw new UnauthorizedException('Bad credentials - pass mismatch');
+        throw new UnauthorizedException('Bad credentials');
       }
     }
   }
 
   async verifyPassword(password: string, hash: string) {
     return await bcrypt.compare(password, hash);
+  }
+
+  async register(createUserDto: CreateUserDto) {
+    const { email } = createUserDto;
+
+    const checkForUser = await this.repo.findOneBy({ email });
+
+    if (checkForUser) {
+      throw new BadRequestException('Email already in use, please use new one');
+    } else {
+      const user = new User();
+      Object.assign(user, createUserDto);
+      this.repo.create(user);
+      await this.repo.save(user);
+      delete user.password;
+      return user;
+    }
   }
 }
