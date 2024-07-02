@@ -24,7 +24,7 @@ export class UserController {
 
     const { token, user } = await this.userService.login(loginUserDto);
     res.cookie('isAuthenticated', true, { maxAge: 2 * 60 * 60 * 1000 }); //max age 2 hours
-    res.cookie('authentication', token, {
+    res.cookie('Authentication', token, {
       httpOnly: true,
       maxAge: 2 * 60 * 60 * 1000,
     });
