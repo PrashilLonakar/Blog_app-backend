@@ -31,4 +31,11 @@ export class UserController {
 
     return res.send({ success: true, user });
   }
+
+  @Post('register')
+  async userRegistration(@Body() userCreate: CreateUserDto) {
+    console.log('userCreate', userCreate);
+
+    return this.userService.register(userCreate);
+  }
 }
