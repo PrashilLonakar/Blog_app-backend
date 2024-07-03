@@ -63,6 +63,7 @@ export class PostController {
   }
 
   @Post('upload-photo')
+  @UseGuards(AuthGuard('jwt'))
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
@@ -99,6 +100,7 @@ export class PostController {
   }
 
   @Get('pictures/:filename')
+  @UseGuards(AuthGuard('jwt'))
   async getPicture(@Param('filename') filename, @Res() res: Response) {
     res.sendFile(filename, { root: './uploads' });
   }

@@ -97,6 +97,7 @@ __decorate([
 ], PostController.prototype, "findBySlug", null);
 __decorate([
     (0, common_1.Post)('upload-photo'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', {
         storage: (0, multer_1.diskStorage)({
             destination: './uploads',
@@ -125,6 +126,7 @@ __decorate([
 ], PostController.prototype, "uploadPhoto", null);
 __decorate([
     (0, common_1.Get)('pictures/:filename'),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     __param(0, (0, common_1.Param)('filename')),
     __param(1, (0, common_1.Res)()),
     __metadata("design:type", Function),
