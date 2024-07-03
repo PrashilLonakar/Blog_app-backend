@@ -1,8 +1,9 @@
 /// <reference types="cookie-parser" />
+/// <reference types="multer" />
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { User } from 'src/user/entities/user.entity';
 export declare class PostController {
     private readonly postService;
@@ -11,6 +12,10 @@ export declare class PostController {
     findAll(query: any, user: User): Promise<import("./entities/post.entity").Post[]>;
     findOne(id: string): Promise<import("./entities/post.entity").Post>;
     findBySlug(slug: string): Promise<import("./entities/post.entity").Post>;
+    uploadPhoto(file: Express.Multer.File): {
+        filePath: string;
+    };
+    getPicture(filename: any, res: Response): Promise<void>;
     update(id: string, updatePostDto: UpdatePostDto): Promise<import("./entities/post.entity").Post>;
     remove(id: string): Promise<{
         success: boolean;
