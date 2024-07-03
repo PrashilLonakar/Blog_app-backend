@@ -28,6 +28,7 @@ import { CurrentUserGuard } from 'src/user/current-user.guard';
 import { Express } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { ACGuard, UseRoles } from 'nest-access-control';
 
 @Controller('post')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -35,7 +36,12 @@ export class PostController {
   constructor(private readonly postService: PostService) {}
 
   @Post()
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'), ACGuard)
+  @UseRoles({
+    possession: 'any',
+    action: 'create',
+    resource: 'post',
+  })
   @UsePipes(ValidationPipe)
   create(
     @Body() createPostDto: CreatePostDto,
@@ -106,13 +112,23 @@ export class PostController {
   }
 
   @Patch(':id')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'), ACGuard)
+  @UseRoles({
+    possession: 'any',
+    action: 'update',
+    resource: 'post',
+  })
   update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
     return this.postService.update(+id, updatePostDto);
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'), ACGuard)
+  @UseRoles({
+    possession: 'any',
+    action: 'delete',
+    resource: 'post',
+  })
   remove(@Param('id') id: string) {
     return this.postService.remove(+id);
   }

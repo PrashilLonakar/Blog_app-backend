@@ -23,6 +23,7 @@ const user_decorator_1 = require("../user/user.decorator");
 const current_user_guard_1 = require("../user/current-user.guard");
 const platform_express_1 = require("@nestjs/platform-express");
 const multer_1 = require("multer");
+const nest_access_control_1 = require("nest-access-control");
 let PostController = class PostController {
     constructor(postService) {
         this.postService = postService;
@@ -63,7 +64,12 @@ let PostController = class PostController {
 exports.PostController = PostController;
 __decorate([
     (0, common_1.Post)(),
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), nest_access_control_1.ACGuard),
+    (0, nest_access_control_1.UseRoles)({
+        possession: 'any',
+        action: 'create',
+        resource: 'post',
+    }),
     (0, common_1.UsePipes)(common_1.ValidationPipe),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Req)()),
@@ -135,7 +141,12 @@ __decorate([
 ], PostController.prototype, "getPicture", null);
 __decorate([
     (0, common_1.Patch)(':id'),
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), nest_access_control_1.ACGuard),
+    (0, nest_access_control_1.UseRoles)({
+        possession: 'any',
+        action: 'update',
+        resource: 'post',
+    }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -144,7 +155,12 @@ __decorate([
 ], PostController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), nest_access_control_1.ACGuard),
+    (0, nest_access_control_1.UseRoles)({
+        possession: 'any',
+        action: 'delete',
+        resource: 'post',
+    }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

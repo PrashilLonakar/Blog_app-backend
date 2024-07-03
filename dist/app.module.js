@@ -14,6 +14,8 @@ const post_module_1 = require("./post/post.module");
 const typeorm_1 = require("@nestjs/typeorm");
 const category_module_1 = require("./category/category.module");
 const user_module_1 = require("./user/user.module");
+const nest_access_control_1 = require("nest-access-control");
+const user_roles_1 = require("./user/user-roles");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -33,6 +35,7 @@ exports.AppModule = AppModule = __decorate([
             }),
             category_module_1.CategoryModule,
             user_module_1.UserModule,
+            nest_access_control_1.AccessControlModule.forRoles(user_roles_1.roles),
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
