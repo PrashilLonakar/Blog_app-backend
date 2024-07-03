@@ -21,6 +21,8 @@ const user_entity_1 = require("../user/entities/user.entity");
 const passport_1 = require("@nestjs/passport");
 const user_decorator_1 = require("../user/user.decorator");
 const current_user_guard_1 = require("../user/current-user.guard");
+const platform_express_1 = require("@nestjs/platform-express");
+const multer_1 = require("multer");
 let PostController = class PostController {
     constructor(postService) {
         this.postService = postService;
@@ -36,6 +38,20 @@ let PostController = class PostController {
     }
     findBySlug(slug) {
         return this.postService.findBySlug(slug);
+    }
+    uploadPhoto(file) {
+        if (!file) {
+            throw new common_1.BadRequestException('File is not an Image');
+        }
+        else {
+            const response = {
+                filePath: `http://localhost:3000/post/pictures/${file.filename}`,
+            };
+            return response;
+        }
+    }
+    async getPicture(filename, res) {
+        res.sendFile(filename, { root: './uploads' });
     }
     update(id, updatePostDto) {
         return this.postService.update(+id, updatePostDto);
@@ -79,6 +95,42 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], PostController.prototype, "findBySlug", null);
+__decorate([
+    (0, common_1.Post)('upload-photo'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', {
+        storage: (0, multer_1.diskStorage)({
+            destination: './uploads',
+            filename: (req, file, cb) => {
+                const filename = file.originalname.split('.')[0];
+                const fileExtension = file.originalname.split('.')[1];
+                const newFileName = filename.split(' ').join('_') +
+                    '_' +
+                    Date.now() +
+                    '.' +
+                    fileExtension;
+                cb(null, newFileName);
+            },
+        }),
+        fileFilter: (req, file, callback) => {
+            if (!file.originalname.match(/.(jpg|jpeg|png|gif)$/)) {
+                return callback(null, false);
+            }
+            callback(null, true);
+        },
+    })),
+    __param(0, (0, common_1.UploadedFile)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], PostController.prototype, "uploadPhoto", null);
+__decorate([
+    (0, common_1.Get)('pictures/:filename'),
+    __param(0, (0, common_1.Param)('filename')),
+    __param(1, (0, common_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], PostController.prototype, "getPicture", null);
 __decorate([
     (0, common_1.Patch)(':id'),
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
