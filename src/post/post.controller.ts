@@ -20,6 +20,8 @@ import { UpdatePostDto } from './dto/update-post.dto';
 import { Request } from 'express';
 import { User } from 'src/user/entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
+import { CurrentUser } from 'src/user/user.decorator';
+import { CurrentUserGuard } from 'src/user/current-user.guard';
 
 @Controller('post')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -29,13 +31,18 @@ export class PostController {
   @Post()
   @UseGuards(AuthGuard('jwt'))
   @UsePipes(ValidationPipe)
-  create(@Body() createPostDto: CreatePostDto, @Req() req: Request) {
+  create(
+    @Body() createPostDto: CreatePostDto,
+    @Req() req: Request,
+    @CurrentUser() user: User,
+  ) {
     // @ts-ignore
     return this.postService.create(createPostDto, req.user as User);
   }
 
   @Get()
-  findAll(@Query() query: any) {
+  @UseGuards(CurrentUserGuard)
+  findAll(@Query() query: any, @CurrentUser() user: User) {
     return this.postService.findAll(query);
   }
 

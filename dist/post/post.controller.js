@@ -17,15 +17,18 @@ const common_1 = require("@nestjs/common");
 const post_service_1 = require("./post.service");
 const create_post_dto_1 = require("./dto/create-post.dto");
 const update_post_dto_1 = require("./dto/update-post.dto");
+const user_entity_1 = require("../user/entities/user.entity");
 const passport_1 = require("@nestjs/passport");
+const user_decorator_1 = require("../user/user.decorator");
+const current_user_guard_1 = require("../user/current-user.guard");
 let PostController = class PostController {
     constructor(postService) {
         this.postService = postService;
     }
-    create(createPostDto, req) {
+    create(createPostDto, req, user) {
         return this.postService.create(createPostDto, req.user);
     }
-    findAll(query) {
+    findAll(query, user) {
         return this.postService.findAll(query);
     }
     findOne(id) {
@@ -48,15 +51,18 @@ __decorate([
     (0, common_1.UsePipes)(common_1.ValidationPipe),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Req)()),
+    __param(2, (0, user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_post_dto_1.CreatePostDto, Object]),
+    __metadata("design:paramtypes", [create_post_dto_1.CreatePostDto, Object, user_entity_1.User]),
     __metadata("design:returntype", void 0)
 ], PostController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    (0, common_1.UseGuards)(current_user_guard_1.CurrentUserGuard),
     __param(0, (0, common_1.Query)()),
+    __param(1, (0, user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, user_entity_1.User]),
     __metadata("design:returntype", void 0)
 ], PostController.prototype, "findAll", null);
 __decorate([
