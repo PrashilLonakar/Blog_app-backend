@@ -5,6 +5,8 @@ import { PostModule } from './post/post.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CategoryModule } from './category/category.module';
 import { UserModule } from './user/user.module';
+import { AccessControlModule } from 'nest-access-control';
+import { roles } from 'src/user/user-roles';
 
 @Module({
   imports: [
@@ -21,6 +23,7 @@ import { UserModule } from './user/user.module';
     }),
     CategoryModule,
     UserModule,
+    AccessControlModule.forRoles(roles),
   ],
   controllers: [AppController],
   providers: [AppService],
